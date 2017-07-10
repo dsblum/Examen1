@@ -1,0 +1,265 @@
+class Usuarios {
+
+	public static function buscarUsuario($codigo) {
+		//busca en base de datos devuelve en $reg el registro resultado o null si no encontro
+		if ($reg) {
+			$usuario=new Usuario($reg["codigousuario"],$reg["usuario"],$reg["clave"],$reg["edad"]);
+			return $usuario;
+		}
+		return null;
+	}
+
+
+}
+
+class Pagos {
+
+	public static function buscarPagos($codigopago) {
+		//busca en base de datos devuelve en $reg el registro resultado o null si no encontro
+		if ($reg) {
+			$pago=new Pago($reg["codigopago"],$reg["importe"],$reg["fecha"]);
+			return $usuario;
+		}
+		return null;
+	}
+}
+
+class Usuario {
+	private $codigo;
+	private $usuario;
+	private $clave;
+	private $edad;
+	private $favoritos;
+	private $pagos;
+
+	public function Usuario($codigo,$usuario,$clave,$edad) {
+		$this->codigo=$codigo;
+		$this->usuario=$usuario;
+		$this->clave=$clave;
+		$this->edad=$edad;
+		$this->favoritos=array();
+		$this->pagos=array();
+	}
+
+	public function getCodigo() {
+		return $this->codigo;
+	}
+
+	public function getUsuario() {
+		return $this->usuario;
+	}
+
+	public function verificarClave($clave) {
+		return ($this->clave==$clave);
+	}
+
+	public function getEdad() {
+		return $this->edad;
+	}
+
+	public function getFavoritos() {
+		return $this->favoritos;
+	}
+	
+	public function getPagos() {
+		return $this->pagos;
+	}
+
+	public function agregarFavorito($codigo) {
+		if ($favorito=Usuarios::buscarUsuario($codigo)) {
+			$this->favoritos[$codigo]=$favorito;
+		}
+	}
+
+	public function eliminarFavorito($codigo) {
+		unset($this->favoritos[$codigo]);
+	}
+	
+	public function agregarPago($codigo) {
+		if ($pago=Pagos::buscarPagos($codigo)) {
+			$this->pagos[$codigo]['codigopago']=$pago['codigopago'];
+			$this->pagos[$codigo]['importe']=$pago['importe'];
+			$this->pagos[$codigo]['fecha']=$pago['fecha'];
+		}
+	}
+	public function eliminarPago($codigo) {
+		foreach ($this->pagos[$codigo] as $valor) {
+			unset($valor);
+		}
+		
+	}
+
+	public function grabar() {
+		$hoy = date("Y-m-d");
+		if ( $this->usuario == "" )
+			echo "Debe ingresar un Nombre"
+		else if ( $this->edad <= 18 )
+			echo "Debe ingresar una edad mayor que 18"
+		else if ( !Usuarios::buscarUsuario($codigo) )
+			echo "El Codigo no existe en la tabla de Usuarios"
+		else   
+		//sentencias sql para grabar el usuario y los favoritos en la base de datos
+				
+	}
+	
+	public function grabarPago($codigo) {
+		
+		$hoy = date("Y-m-d");
+		if ( $this->pagos[$codigo]['importe'] <= 0 )
+			echo "Debe ingresar un Importe mayor que CERO"
+		else if ( $this->pagos[$codigo]['fecha'] < $hoy )
+			echo "La fecha no puede ser anterior al dia de hoy"
+		else if ( !Usuarios::buscarUsuario($codigo) )
+			echo "El Codigo no existe en la tabla de Usuarios"
+		else
+		//sentencias sql para grabar el usuario y los favoritos en la base de datos
+			
+	}
+
+}
+
+
+class Pago {
+	private $codigousuario;
+	private $codigopago;
+	private $importe;
+	private $fecha;
+
+	public function Pago($codigopago,$importe,fecha) {
+		$this->codigopago=$codigopago;
+		$this->importe=$importe;
+		$this->fecha=$fecha;
+	}
+
+	public function getCodigo() {
+		return $this->codigopago;
+	}
+
+	public function getImporte() {
+		return $this->importe;
+	}
+
+	public function getFecha() {
+		return $this->fecha;
+	}
+
+	
+	public function grabar() {
+		$hoy = date("Y-m-d");
+		if ( $this->importe <= 0 )
+			echo "Debe ingresar un Importe mayor que CERO"
+		else if ( $this->fecha < $hoy )
+			echo "La fecha no puede ser anterior al dia de hoy"
+		else
+		//sentencias sql para grabar el pago en la base de datos
+		
+	}
+
+}
+
+Clases Figuras Geometricas
+
+
+class FiguraGeometrica {
+
+    public $superficie;
+    public $base;
+    public $altura;
+    public $diametro;
+    public $tipofigura;
+    
+    public getFigura($tipo){
+        
+		$tipofigura = $tipo;
+		
+        if ( $tipo == "Circulo" )
+			$figura = new Circulo();
+		else if ( $tipo == "Cuadrado" )
+			$figura = new Cuadrado();
+		else if ( $tipo == "Triangulo" )
+			$figura = new Triangulo();
+		else
+			$figura = null;
+        
+    }
+	
+	public getSuperficie() {
+		return null;	
+	}
+	
+	public getBase() {
+		return null;
+	}
+	
+	public getAltura() {
+		return null;
+	}
+	
+	public getDiametro() {
+		return null;
+	}
+	
+  
+    
+} 
+
+
+class Circulo extends FiguraGeometrica {
+
+    public Circulo(){        
+        this->diametro = 10;
+    }
+    
+    public getSuperficie() {
+		return (3.14) * (this->diametro/2) * (this->diametro/2);
+	}
+	
+	public getDiametro() {
+		return this->diametro;
+	}
+    
+
+} 
+
+class Cuadrado extends FiguraGeometrica {
+
+    public Cuadrado(){        
+        this->base = 10;
+        this->altura = 10;
+    }
+    
+    public getSuperficie() {
+		return this->base * this->altura;
+	}
+	
+	public getBase() {
+		return this->base;
+	}
+	
+	public getAltura() {
+		return this->altura;
+	}
+	
+} 
+
+class Triangulo extends FiguraGeometrica {
+
+    public Triangulo(){        
+        this->base = 10;
+        this->altura = 10;
+    }
+    
+    public getSuperficie() {
+		return this->base * this->altura / 2;
+	}
+	
+	public getBase() {
+		return this->base;
+	}
+	
+	public getAltura() {
+		return this->altura;
+	}
+   
+
+} 
